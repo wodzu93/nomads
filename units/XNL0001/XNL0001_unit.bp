@@ -397,11 +397,8 @@ UnitBlueprint {
             BuildTime = 500,
             Icon = 'hamc2',
             Name = '<LOC NomadsACUEnh_DoubleGuns_Help>',
-            ShowBones = {
-                'Gun2',
-            },
-            OverchargeIncluded = false,
-            Prerequisite = 'GunUpgrade',
+            NewMaxRadius = 30,
+            Prerequisite = 'ExplosiveAmmo',
             Slot = 'RCH',
             UpgradeEffectBones = {
                 'Gun2',
@@ -416,27 +413,28 @@ UnitBlueprint {
             BuildCostEnergy = 1,
             BuildCostMass = 1,
             BuildTime = 0.1,
-            HideBones = {
-                'Gun2',
-            },
+            
             Icon = 'hamc2',
             Name = '<LOC NomadsACUEnh_DoubleGuns_Remove>',
+            
             Prerequisite = 'DoubleGuns',
             RemoveEnhancements = {
-                'GunUpgrade',
+                'ExplosiveAmmo',
                 'DoubleGuns',
                 'DoubleGunsRemove',
             },
             Slot = 'RCH',
         },
-        GunUpgrade = {
+        ExplosiveAmmo = {
             BuildCostEnergy = 15000,
             BuildCostMass = 500,
             BuildTime = 500,
             Icon = 'hamc',
-            Name = '<LOC NomadsACUEnh_GunUpgrade_Help>',
+            Name = '<LOC NomadsACUEnh_ExplosiveAmmo_Help>',
             NewDamageRadius = 2.5,
-            NewMaxRadius = 30,
+            ShowBones = {
+                'Gun2',
+            },
             Slot = 'RCH',
             UpgradeEffectBones = {
                 'ElbowR',
@@ -447,16 +445,19 @@ UnitBlueprint {
                 'Abb1',
             },
         },
-        GunUpgradeRemove = {
+        ExplosiveAmmoRemove = {
             BuildCostEnergy = 1,
             BuildCostMass = 1,
             BuildTime = 0.1,
+            HideBones = {
+                'Gun2',
+            },
             Icon = 'hamc',
-            Name = '<LOC NomadsACUEnh_GunUpgrade_Remove>',
-            Prerequisite = 'GunUpgrade',
+            Name = '<LOC NomadsACUEnh_ExplosiveAmmo_Remove>',
+            Prerequisite = 'ExplosiveAmmo',
             RemoveEnhancements = {
-                'GunUpgrade',
-                'GunUpgradeRemove',
+                'ExplosiveAmmo',
+                'ExplosiveAmmoRemove',
             },
             Slot = 'RCH',
         },

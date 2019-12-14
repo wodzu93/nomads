@@ -39,8 +39,8 @@ XNL0001 = Class(ACUUnit) {
             CapGetWepAffectingEnhancementBP = function(self)
                 if self.unit:HasEnhancement('DoubleGuns') then
                     return self.unit:GetBlueprint().Enhancements['DoubleGuns']
-                elseif self.unit:HasEnhancement('GunUpgrade') then
-                    return self.unit:GetBlueprint().Enhancements['GunUpgrade']
+                elseif self.unit:HasEnhancement('ExplosiveAmmo') then
+                    return self.unit:GetBlueprint().Enhancements['ExplosiveAmmo']
                 else
                     return {}
                 end
@@ -465,58 +465,46 @@ XNL0001 = Class(ACUUnit) {
             self.Sync.HasIntelProbeAdvancedAbility = false
         end,
 
-        GunUpgrade = function(self, bp)
+        ExplosiveAmmo = function(self, bp)
             local wep = self:GetWeaponByLabel('MainGun')
             local wbp = wep:GetBlueprint()
 
             -- adjust main gun
             wep:AddDamageRadiusMod(bp.NewDamageRadius or 3)
-            wep:ChangeMaxRadius(bp.NewMaxRadius or wbp.MaxRadius)
-
-            -- adjust overcharge gun
-            local oc = self:GetWeaponByLabel('OverCharge')
-            oc:ChangeMaxRadius( bp.NewMaxRadius or wbp.MaxRadius )
-            local oca = self:GetWeaponByLabel('AutoOverCharge')
-            oca:ChangeMaxRadius( bp.NewMaxRadius or wbp.MaxRadius )
-        end,
-        
-        GunUpgradeRemove = function(self, bp)
-            -- adjust main gun
-            local ubp = self:GetBlueprint()
-            local wep = self:GetWeaponByLabel('MainGun')
-            local wbp = wep:GetBlueprint()
-            wep:AddDamageRadiusMod(-ubp.Enhancements['GunUpgrade'].NewDamageRadius)
-            wep:ChangeMaxRadius(wbp.MaxRadius)
-
-            -- adjust overcharge gun
-            local oc = self:GetWeaponByLabel('OverCharge')
-            oc:ChangeMaxRadius( wbp.MaxRadius )
-            local oca = self:GetWeaponByLabel('AutoOverCharge')
-            oca:ChangeMaxRadius( bp.NewMaxRadius or wbp.MaxRadius )
-        end,
-        
-        DoubleGuns = function(self, bp)
-            -- this one should not change weapon damage, range, etc. The weapon script can't cope with that.
             self.DoubleBarrels = true
             self.DoubleBarrelOvercharge = bp.OverchargeIncluded
         end,
         
-        DoubleGunsRemove = function(self, bp)
+        ExplosiveAmmoRemove = function(self, bp)
             self.DoubleBarrels = false
             self.DoubleBarrelOvercharge = false
-
             -- adjust main gun
             local ubp = self:GetBlueprint()
             local wep = self:GetWeaponByLabel('MainGun')
             local wbp = wep:GetBlueprint()
-            wep:AddDamageRadiusMod(-ubp.Enhancements['GunUpgrade'].NewDamageRadius)
-            wep:ChangeMaxRadius(wbp.MaxRadius)
-
-            -- adjust overcharge gun
+            wep:AddDamageRadiusMod(-ubp.Enhancements['ExplosiveAmmo'].NewDamageRadius)
+        end,
+        
+        DoubleGuns = function(self, bp)
+            -- this one should not change weapon damage, range, etc. The weapon script can't cope with that.
+            local wep = self:GetWeaponByLabel('MainGun')
+            wep:ChangeMaxRadius(bp.NewMaxRadius or 44)
             local oc = self:GetWeaponByLabel('OverCharge')
-            oc:ChangeMaxRadius( wbp.MaxRadius )
-            local oca = self:GetWeaponByLabel('AutoOverCharge')
-            oca:ChangeMaxRadius( bp.NewMaxRadius or wbp.MaxRadius )
+            oc:ChangeMaxRadius(bp.NewMaxRadius or 44)
+            local aoc = self:GetWeaponByLabel('AutoOverCharge')
+            aoc:ChangeMaxRadius(bp.NewMaxRadius or 44)
+        end,
+        
+        DoubleGunsRemove = function(self, bp)
+            local bp = self:GetBlueprint().Enhancements['DoubleGuns']
+            if not bp then return end
+            local wep = self:GetWeaponByLabel('MainGun')
+            local bpDisrupt = self:GetBlueprint().Weapon[1].MaxRadius
+            wep:ChangeMaxRadius(bpDisrupt or 22)
+            local oc = self:GetWeaponByLabel('OverCharge')
+            oc:ChangeMaxRadius(bpDisrupt or 22)
+            local aoc = self:GetWeaponByLabel('AutoOverCharge')
+            aoc:ChangeMaxRadius(bpDisrupt or 22)
         end,
         
         MovementSpeedIncrease = function(self, bp)
